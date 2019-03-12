@@ -38,7 +38,6 @@ function formatTime(value) {
 for (let i in audios) {
     audios[i].index = i
 
-    //内容管理第4个语音
     $(document).ready(function () {
         // 控制音频文件名显示宽度
         var maxW = $('.audio-right')[i].offsetWidth;
