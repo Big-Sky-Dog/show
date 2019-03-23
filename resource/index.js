@@ -1,5 +1,8 @@
 
 const audios = document.querySelectorAll('audio')
+const audioRight = document.querySelectorAll('.audio-right')
+const audioRightP =  document.querySelectorAll('.audio-right > p')
+const audioLeftImg = document.querySelectorAll('.audio-left > img')
 // const playBtn = document.querySelectorAll('.audio-left').childNodes
 
 let arr = []
@@ -35,27 +38,28 @@ function formatTime(value) {
     return time;
 }
 
-for (let i in audios) {
-    audios[i].index = i
+for (var i = 0; i < audios.length; i++) {
 
-    $(document).ready(function () {
-        // 控制音频文件名显示宽度
-        var maxW = $('.audio-right')[i].offsetWidth;
-        $('.audio-right p')[i].style = "max-width:" + maxW
+    window.onload = load(i)
+    function load(i) {
+        var maxW = audioRight[i].offsetWidth;
+        audioRightP[i].style = "max-width:" + maxW
         // 可能会有多个音频，逐个初始化音频控制事件
-        initAudioEvent();
-    });
+        initAudioEvent(i);
+    }
+    
 
-    function initAudioEvent() {
+    function initAudioEvent(i) {
         // 点击播放/暂停图片时，控制音乐的播放与暂停
-        $('.audio-left > img')[i].onclick = function () {
+        audioLeftImg[i].onclick = function () {
+            
 
-            domOne = $('.audio-right > div:nth-child(2) > div')[i]
-            domTwo = $('.audio-right > div:nth-child(2) > span')[i]
-            domThree = $('.audio-length-current')[i]
+            domOne = document.querySelectorAll('.audio-right > div:nth-child(2) > div')[i]
+            domTwo = document.querySelectorAll('.audio-right > div:nth-child(2) > span')[i]
+            domThree = document.querySelectorAll('.audio-length-current')[i]
 
-            let obj = $('.audio-left > img')[i].src.lastIndexOf("/")
-            let fileName = $('.audio-left > img')[i].src.substr(obj+1).split(".")[0]
+            let obj = audioLeftImg[i].src.lastIndexOf("/")
+            let fileName = audioLeftImg[i].src.substr(obj+1).split(".")[0]
             let number = fileName.charAt(fileName.length - 1)
 
             arr.unshift(i)
@@ -71,36 +75,36 @@ for (let i in audios) {
             // 监听播放完成事件
             audios[i].addEventListener('ended', function () {
                 // 播放完成时把进度调回开始的位置
-                $('.audio-right > div:nth-child(2) > div')[i].style = 'width: 0'
-                $('.audio-right > div:nth-child(2) > span').style = 'left:0'
-                $('.audio-length-current')[i].innerHTML = transTime(0)
-                $('.audio-left > img')[i].src = './resource/pause' + number + '.png'
+                document.querySelectorAll('.audio-right > div:nth-child(2) > div')[i].style = 'width: 0'
+                document.querySelectorAll('.audio-right > div:nth-child(2) > span').style = 'left:0'
+                document.querySelectorAll('.audio-length-current')[i].innerHTML = transTime(0)
+                audioLeftImg[i].src = './resource/pause' + number + '.png'
             }, false);
 
             // 改变播放/暂停图片
             if(arr.length < 2) {
                 audios[i].play()
 
-                $('.audio-left > img')[i].src = './resource/play' + number + '.png'
+                audioLeftImg[i].src = './resource/play' + number + '.png'
 
             } else if(arr[0] != arr[1]) {
                 audios[i].play()
                 audios[arr[1]].pause()
-                $('.audio-left > img')[i].src = './resource/play' + number + '.png'
+                audioLeftImg[i].src = './resource/play' + number + '.png'
                 
-                let obj2 = $('.audio-left > img')[arr[1]].src.lastIndexOf("/")
-                let fileName2 = $('.audio-left > img')[arr[1]].src.substr(obj2 + 1).split(".")[0]
+                let obj2 = audioLeftImg[arr[1]].src.lastIndexOf("/")
+                let fileName2 = audioLeftImg[arr[1]].src.substr(obj2 + 1).split(".")[0]
                 let number2 = fileName2.charAt(fileName2.length - 1)
-                $('.audio-left > img')[arr[1]].src = './resource/pause' + number2 + '.png'
+                audioLeftImg[arr[1]].src = './resource/pause' + number2 + '.png'
 
             } else {
                 if(audios[i].currentTime.toFixed(1) == audios[i].duration.toFixed(1)) {
                     audios[i].play()
-                    $('.audio-left > img')[i].src = './resource/play' + number + '.png'
+                    audioLeftImg[i].src = './resource/play' + number + '.png'
                 } else {
                     audios[i].pause()
                     arr = []
-                    $('.audio-left > img')[i].src = './resource/pause' + number + '.png'
+                    audioLeftImg[i].src = './resource/pause' + number + '.png'
                 }
             }
             
@@ -108,7 +112,7 @@ for (let i in audios) {
 
         // 点击进度条跳到指定点播放
         // PS：此处不要用click，否则下面的拖动进度点事件有可能在此处触发，此时e.offsetX的值非常小，会导致进度条弹回开始处（简直不能忍！！）
-        let doms1 = $('.audio-right > div:nth-child(2)')
+        let doms1 = document.querySelectorAll('.audio-right > div:nth-child(2)')
         doms1[i].onmousedown = function (e) {
             // 只有音乐开始播放后才可以调节，已经播放过但暂停了的也可以
             if (!audios[i].paused || audios[i].currentTime != 0) {
@@ -120,16 +124,16 @@ for (let i in audios) {
             }
         }
 
-        var dot = $('.audio-right > div:nth-child(2) > span')
+        var dot = document.querySelectorAll('.audio-right > div:nth-child(2) > span')
 
         // 鼠标拖动进度点时可以调节进度
         // 只有音乐开始播放后才可以调节，已经播放过但暂停了的也可以
         // 鼠标按下时
         dot[i].onmousedown = function (event) {
 
-            domOne = $('.audio-right > div:nth-child(2) > div')[i]
-            domTwo = $('.audio-right > div:nth-child(2) > span')[i]
-            domThree = $('.audio-length-current')[i]
+            domOne = document.querySelectorAll('.audio-right > div:nth-child(2) > div')[i]
+            domTwo = document.querySelectorAll('.audio-right > div:nth-child(2) > span')[i]
+            domThree = document.querySelectorAll('.audio-length-current')[i]
 
             if (!audios[i].paused || audios[i].currentTime != 0) {
                 var oriLeft = dot[i].offsetLeft;
