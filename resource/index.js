@@ -189,3 +189,20 @@ for (var i = 0; i < audios.length; i++) {
         domThree.innerHTML = transTime(audio.currentTime);
     }
 }
+
+// 适应pc
+const oneFontImg = document.getElementById('oneFontImg')
+const fangtopxia = document.querySelectorAll('.fangtopxia')
+const title = document.querySelectorAll('.banner div p')
+const u = navigator.userAgent
+const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 //android终端 
+const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端 
+if(!isAndroid || !isiOS) {
+    oneFontImg.style = 'text-align: left; margin-left: 20px;margin-top: 220px;display: block;'
+    for(var i = 0; i < fangtopxia.length; i++) {
+        fangtopxia[i].style = 'height: 174px;'
+    }
+    for(var j = 0; j < title.length; j++) {
+        title[j].style = 'font-size: 40px;margin-bottom: 20px;'
+    }
+}
